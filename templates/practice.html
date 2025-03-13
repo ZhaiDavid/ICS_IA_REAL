@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap" rel="stylesheet">
+
+    <style>
+    body {
+        margin-left: 20px;
+        margin-right: 20px;
+        font-family: arial, sans-serif;
+    }
+    table {
+      font-size: 20px;
+    }
+    
+    td, th {
+      border: 2px solid #d3d3d3;
+      text-align: center;
+      padding: 8px;
+    }
+    input[name="searchbar"] {
+        margin-top: 30px;
+        margin-bottom:30px;
+        font-size: 16px; 
+        padding: 10px; 
+        border-radius: 5px;  
+        border: 1px solid #ccc;  
+    }
+    .list1{
+        position: fixed;
+        top: 200px;  
+        right: 50px;  
+        width: 200px; 
+        padding: 10px;
+        border-radius: 5px; 
+        border: 2px solid #d3d3d3;
+        text-align: center; 
+    }
+    .list2 {
+        position: fixed;
+        top: 500px;  
+        right: 50px;  
+        width: 200px; 
+        padding: 10px;
+        border-radius: 5px; 
+        border: 2px solid #d3d3d3;
+        text-align: center; 
+    }
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+    }
+    .modes a {
+        color: black; 
+        text-decoration: none; 
+        font-family: 'Cuprum', sans-serif;
+        margin-right: 10px;
+    }
+    .modes a:first-child {
+        text-decoration: underline;
+        text-decoration-color: #000080;  
+        text-decoration-thickness: 3px; 
+        text-underline-offset: 6px; 
+    }
+    .modes {
+        border-radius: 7px; 
+        border: 2px solid #d3d3d3;
+        padding: 15px;
+    }
+
+    .logout {
+        right: 200px;
+    }
+
+
+    
+    
+    </style>
+{% endblock %}
+
+{% block body %}
+
+<script src="https://unpkg.com/htmx.org@2.0.1"></script>
+
+<div class = "navbar">
+    <div class = "modes">
+        <a href = "/practice"> PRACTICE</a> 
+        <a href = "/contestChoice"> CONTEST</a>
+        <a href ="/profile"> PROFILE </a>
+    </div>
+    <div class = "logout">
+        <a href ="/"> LOG OUT</a>
+    </div>
+</div>
+
+<div class = "search"> 
+<input
+    type="text"
+    placeholder="Search"
+    name="searchbar"
+    hx-get="/search"
+    hx-trigger="keyup changed delay:500ms"
+    hx-target="#questions"
+/>
+</div>
+
+<script>
+    function reload() {
+        location.reload();
+    }
+</script>
+
+
+
+
+<div id = "questions">
+    <table>
+        <tr> 
+            <th>Status</th>
+            <th>Starred</th>
+            <th>Problem</th>
+        </tr>
+        {% for q in questions %}
+            <tr> 
+                <th>
+                    {% if not q.isCompleted(userId) %}
+                    ⛔
+                    {% else %}
+                    ✅
+                    {% endif %}
+                </th>
+                <th>
+                    <!--
+                    <form action="/handle_question" method="post" onsubmit = "setTimeout(reload, 100);">
+                        <input type="hidden" name="question_id" value="{{ q.filename }}">
+                        <input type="submit" value="Star/Unstar" class="button">
+                    
+                    </form>
+                -->
+                    {% if q.isStarred(userId)%}
+                    <p> ⭐ </p>
+                    {% endif %}
+                   
+                </th>
+                <th> <a href="/solve/{{q.id}}">{{ q.name }}</a> </th>
+                
+
+            </tr>
+        {% endfor %}
+
+
+    </table>
+    
+</div>
+<div class = "list1">
+    <b>Attempted Questions</b>
+    <hr style="border: 1px solid #d3d3d3; width: 100%;">
+    <br>
+    {% set count = namespace(value=0) %}
+    {% for q in user.attempted %}
+        {% if count.value < 5 %}
+            {% if not q.isCompleted(userId)%}
+                <a href="/solve/{{q.id}}">{{ q.name }}</a>
+            
+                <br>
+                <br>
+                {% set count.value = count.value + 1 %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+    <a href = "/attempted">See full list</a>
+    
+</div>
+
+<div class = "list2">
+    <b>Starred Questions</b>
+    <hr style="border: 1px solid #d3d3d3; width: 100%;">
+    <br>
+    {% for q in user.starred %}
+        {% if loop.index <= 5 %}
+            <a href="/solve/{{q.id}}">{{ q.name }}</a>
+            <br>
+            <br>
+        {% endif %}
+      
+    {% endfor %}
+    <a href = "/starred">See full list</a>
+
+    
+</div>
+{% endblock %}

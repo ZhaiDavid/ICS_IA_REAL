@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+
+<ul>
+  <li> <a href = "/practice"> practice</a> </li>
+  {{user.doingContest}}
+  {% if user.doingContest %}
+  <li> <a href = "/contest"> contest</a> </li>
+  {% else %}
+  <li> <a href = "/contestChoice"> contest</a></li>
+  {% endif %}
+
+ 
+  <li> <a href = "/test"> test</a> </li>
+  
+  
+
+  <li> <a href ="/profile"> profile </a></li>
+  <li> <a href ="/"> log out</a></li>
+</ul>
+
+<p> STARRED</p>
+<ul>
+  {% for q in starred %}
+    <li> <a href = "/solve/{{q.id}}">{{q.name}}</a></li>
+  {% endfor %}
+</ul>
+
+<p> ATTEMPTED </p>
+<ul>
+  {% for q in attempted%}
+    {% if not q.isCompleted(user.id) %}
+      <li><a href = "/solve/{{q.id}}">{{q.name}}</a></li>
+    {% endif %}
+  {% endfor %}
+</ul>
+
+
+
+
+
+
+  
+ 
+  
+
+{% endblock %}

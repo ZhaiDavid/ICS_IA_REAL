@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<style>
+  body {
+      font-family: arial, sans-serif;
+     
+  }
+  .navbar {
+      margin-left:20px;
+      display: flex;
+      justify-content: space-between;
+  }
+  .modes a {
+      color: black; 
+      text-decoration: none; 
+      font-family: 'Cuprum', sans-serif;
+      margin-right: 10px;
+  }
+  
+  .modes {
+      border-radius: 7px; 
+      border: 2px solid #d3d3d3;
+      padding: 15px;
+  }
+
+  .logout {
+      right: 200px;
+  }
+  .form{
+    font-size:15px;
+    margin-left:20px;
+    margin-top: 20px;
+  }
+  select{
+    font-size:20px;
+  }
+  input{
+    font-size:15px;
+  }
+  .modes a:nth-child(2) {
+    text-decoration: underline;
+    text-decoration-color: #000080;  
+    text-decoration-thickness: 3px; 
+    text-underline-offset: 6px; 
+  }
+
+</style>
+
+{% endblock %}
+
+{% block body %}
+<div class = "navbar">
+  <div class = "modes">
+      <a href = "/practice"> PRACTICE</a> 
+      <a href = "/contestChoice"> CONTEST</a>
+      <a href ="/profile"> PROFILE </a>
+  </div>
+  <div class = "logout">
+      <a href ="/"> LOG OUT</a>
+  </div>
+</div>
+<div class = "form"> 
+  <form action="/handle_choice" method = "post">
+      <label for="contest">Choose a contest:</label>
+      <select id="contest" name="contest">
+        <option value="AIME I">AIME I</option>
+        <option value="AMC 12A">AMC 12A</option>
+      </select>
+      <br>
+      <br>
+
+      <label for="year">Choose the year:</label>
+      <select id="year" name="year">
+        <option value="2021">2021</option?>
+      </select>
+      <br>
+      <br>
+      <input type="submit">
+  </form>
+</div>
+
+{% endblock %}

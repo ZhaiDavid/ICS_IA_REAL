@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<style>
+    body{
+        height: 100vh;
+        width: 100vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 30;
+        font-family: Helvetica, Arial, sans-serif;
+
+    }
+    input {
+        margin-left: 20x; 
+    }
+    .warn {
+        color: red;
+        font-size: 15px;
+    }
+    .form{
+        font-size:20px;
+    }
+    button{
+        padding: 5px;
+        border-radius: 2px;
+        font-size: 18px;
+    }
+
+
+
+</style>
+{% endblock %}
+
+{% block body %}
+<form method = "POST">
+    <div class = "form">
+        <label for="username">Username</label>
+        <input type="text" id = "username" name="username">
+        <br>
+        <br>
+        <label for="password">Password</label>
+        <input type="password" id = "password" name="password">
+        <br>
+        <br>
+        <button type="submit">Login</button>
+        {% if warn %}
+            <p>The username or password is incorrect</p>
+        {% endif %}
+        <p>Back to <a href = "/">register</a>?</p>
+    </div>
+</form>
+
+{% endblock %}

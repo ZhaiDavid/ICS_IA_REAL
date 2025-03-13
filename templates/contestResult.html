@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<style>
+    body {
+        font-family: arial, sans-serif;
+       
+       
+    }
+    .navbar {
+        margin-left:20px;
+        display: flex;
+        justify-content: space-between;
+    }
+    .modes a {
+        color: black; 
+        text-decoration: none; 
+        font-family: 'Cuprum', sans-serif;
+        margin-right: 10px;
+    }
+    
+    .modes {
+        border-radius: 7px; 
+        border: 2px solid #d3d3d3;
+        padding: 15px;
+    }
+  
+    .logout {
+        right: 200px;
+    }
+    .question {
+        border: 1px solid #ccc;
+        padding: 10px; 
+        margin-bottom: 10px; 
+        border-radius: 5px; 
+        background-color: #f9f9f9; 
+        margin-left:20px;
+    }
+    .text{
+        margin-left:20px;
+        font-size:20px;
+
+    }
+    .modes a:nth-child(2) {
+        text-decoration: underline;
+        text-decoration-color: #000080;  
+        text-decoration-thickness: 3px; 
+        text-underline-offset: 6px; 
+    }
+
+   
+   
+  </style>
+{% endblock %}
+
+{% block body %}
+<div class = "navbar">
+    <div class = "modes">
+        <a href = "/practice"> PRACTICE</a> 
+        <a href = "/contestChoice"> CONTEST</a>
+        <a href ="/profile"> PROFILE </a>
+    </div>
+    <div class = "logout">
+        <a href ="/"> LOG OUT</a>
+    </div>
+</div>
+<div class = "text">
+    <p>Contest Over!</p>
+    <p>Score: {{score}}/{{max}}</p>
+</div>
+{% for d in data%}
+    <div class = "question">
+        {%set q = Question.query.get(d.question_id) %}
+        <a href="/solve/{{q.id}}">{{ q.name }}</a>
+        <img src="{{ url_for('static', filename=q.filename[7:]) }}" style="margin-top: 10px;">
+
+        <p> Your answer: {{d.user_answer}} </p>
+        {% if d.user_answer == q.answer%}
+            <p> (Correct) </p>
+        {% endif %}
+        {% if d.user_answer == '' %}
+            <p> (Empty)</p>
+        {% endif %}
+        {% if d.user_answer != '' and d.user_answer != q.answer%}
+            <p> (Incorrect) </p>
+        {% endif %}
+    </div>
+  
+{% endfor %}
+
+{% endblock %}

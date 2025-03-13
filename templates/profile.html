@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+<style>
+  body {
+      font-family: arial, sans-serif;
+     
+  }
+  .navbar {
+      margin-left:20px;
+      display: flex;
+      justify-content: space-between;
+  }
+  .modes a {
+      color: black; 
+      text-decoration: none; 
+      font-family: 'Cuprum', sans-serif;
+      margin-right: 10px;
+  }
+  
+  .modes {
+      border-radius: 7px; 
+      border: 2px solid #d3d3d3;
+      padding: 15px;
+  }
+
+  .logout {
+      right: 200px;
+  }
+  .form{
+    font-size:15px;
+    margin-left:20px;
+    margin-top: 20px;
+  }
+  select{
+    font-size:20px;
+  }
+  input{
+    font-size:15px;
+  }
+  .modes a:nth-child(3) {
+    text-decoration: underline;
+    text-decoration-color: #000080;  
+    text-decoration-thickness: 3px; 
+    text-underline-offset: 6px; 
+  }
+
+</style>
+{% endblock %}
+
+{% block body %}
+<div class = "navbar">
+  <div class = "modes">
+      <a href = "/practice"> PRACTICE</a> 
+      <a href = "/contestChoice"> CONTEST</a>
+      <a href ="/profile"> PROFILE </a>
+  </div>
+  <div class = "logout">
+      <a href ="/"> LOG OUT</a>
+  </div>
+</div>
+<canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+
+<script> 
+    const xyValues = [];
+    const jKeys = {{ keys | tojson }};
+
+
+    let len = {{scores}}.length;
+    for (let i = 0; i < len; i++) {
+      xyValues.push({x: new Date({{times}}[i]*1000), 
+                     y: {{scores}}[i], 
+                     key: jKeys[i]}
+                    );
+    }
+    
+   
+
+    new Chart("myChart", {
+      type: "scatter",
+      data: {
+        datasets: [{
+          pointRadius: 4,
+          pointBackgroundColor: "rgb(0,0,255)",
+          data: xyValues
+        }]
+      },
+      options: {
+        scales: {
+          x: {
+            type: 'time',
+            time: {
+              unit: 'month',
+              displayFormats: {
+                month: 'MMM yyyy'
+              }
+            },       
+          },
+          y: { 
+            min: 0, 
+            max: 100}
+        },
+  
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            enable: true,
+            callbacks: {
+              label: function(tooltipItem) {
+                let date = new Intl.DateTimeFormat().format(tooltipItem.raw.x);
+                return [
+                'Date: ' + date,
+                'Contest: ' + tooltipItem.raw.key,
+                'Percentile: ' + tooltipItem.raw.y + '%'
+              ];
+              }
+            }
+          }
+        }
+      } 
+    }); 
+</script>
+
+<form action="/handle_graph" method = "post">
+  <label for="contest">Choose a contest:</label>
+  <select id="contest" name="contest">
+    <option value="{{selected}}">{{selected}}</option>
+    {% for type in types%}
+      {%if type.name != selected %}
+      <option value="{{type.name}}">{{type.name}}</option>
+      {% endif %}
+    {%endfor%}
+  </select>
+
+  <input type="submit">
+</form>
+
+
+{% endblock %}

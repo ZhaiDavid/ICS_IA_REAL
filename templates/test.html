@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+<form method = "POST">
+    {% for data in profile %}
+        {{data.id}}
+        {{data.username}}
+        {{data.password}}
+        <br>
+      
+    {% endfor %}
+</form>
+{% endblock %}

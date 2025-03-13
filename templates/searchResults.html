@@ -1,0 +1,34 @@
+<table>
+    <thead>
+        <tr>
+            <th>Status</th>
+            <th>Starred</th>
+            <th>Problem</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for q in questions %}
+        <tr>
+            <td>
+                {% if q.isCompleted(user_id) %}
+                    ✅ 
+                {% else %}
+                    ⛔
+                {% endif %}
+            </td>
+            <td>
+                <!--
+                <form action="/handle_question" method="post" onsubmit = "setTimeout(reload, 100);">
+                    <input type="hidden" name="question_id" value="{{ q.filename }}">
+                    <input type="submit" value="Star/Unstar" class="button">
+                </form>
+                  -->
+                {% if q.isStarred(user_id)%}
+                    <p> ⭐ </p>
+                {% endif %}
+            </td>
+            <td><a href="/solve/{{ q.id }}">{{ q.name }}</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

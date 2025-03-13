@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<style>
+    body{
+        height: 100vh;
+        width: 100vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 30px;
+        font-family: Helvetica, Arial, sans-serif;
+
+    }
+    input {
+        margin-left: 20px; 
+    }
+    .warn {
+        color: red;
+        font-size: 15px;
+    }
+    .form{
+        font-size:20px;
+    }
+    button{
+        padding: 5px;
+        border-radius: 2px;
+        font-size: 18px;
+    }
+
+
+
+</style>
+{% endblock %}
+
+{% block body %}
+
+
+
+<form method = "POST">
+    {% if success %}
+        <p> You have successfully registered</p>
+    {% endif %}
+
+    <div class = "warn">
+        {% if warn2 and submitted %}
+            <p>No fields should be left empty</p>
+        {% endif %}
+    </div>
+    <br>
+    <br>
+
+    <div class = "form">
+    <label for="username">Username  </label>
+    <input type="text" id = "username" name="username">
+    <br>
+    <br>
+    <div class = "warn">
+        {% if warn and submitted %}
+            <p>This username has already been taken</p>
+        {% endif %}
+    </div>
+    <label for="password">Password  </label>
+    <input type="password" id = "password" name="password">
+    <br>
+    <br>
+    
+    <label for="confirm ">Confirm password  </label>
+    <input type="password" id = "confirm" name="confirm">
+    <div class = "warn">
+        {% if warn3 and submitted%}
+            <p>Confirmation Mismatched</p>
+        {% endif %}
+    </div>
+    <br>
+    <br>
+    <button type="submit">Register</button>
+    </div>
+
+
+    
+    <p>Already have an account? <a href = "/login">Log In </a></p>
+
+
+
+</form>
+
+
+{% endblock %}
